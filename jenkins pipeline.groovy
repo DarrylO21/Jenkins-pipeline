@@ -1,43 +1,56 @@
 pipeline{
     agent any
     environment {
-        DIRECTORY_PATH= "User\\Code"
-        TESTING_ENVIRONMENT= "VirtualBox"
-        PRODUCTION_ENVIRONMENT= "Darryl"
+        BUILD_AUTOMATION_TOOL = "Gradle"
+        TEST_AUTOMATION_TOOL = "Selenium"
+        CODE_ANALYSIS_TOOL = "Klocwork"
+        SECURITY_SCAN_TOOL = "Coverity"
+        STAGING_TOOL = "DigitalOcean"
+        DEPLOYMENT_TOOL = "Ansible"
     }
     stages{
         stage('Build'){
             steps{
-                echo "fetch the source code from the directory path $DIRECTORY_PATH"
+                echo "Compiling and packaging code in $BUILD_AUTOMATION_TOOL"
+            }
+        }
+        stage('Unit and Integration Tests'){
+            steps{
+                echo "Running tests in $TEST_AUTOMATION_TOOL"
 
-                echo "compile the code and generate any necessary artifacts"
-            }
-        }
-        stage('Test'){
-            steps{
-                echo "unit tests"
+                echo "Running unit tests to ensure the code is functioning as expected"
 
-                echo "integration tests"
+                echo "Running integration tests to ensure different components of the application are working together as expected"
+            }
+            post{
+                mail to: "darryldeal21@gmail.com",
+                subject: "Unit and Integration Tests Status Email",
+                body: "Unit and Integration Tests Status: ${currentBuild.currentResult}\nStage logs attached below. ${BUILD_LOG, maxLines, escapeHtml}"
             }
         }
-        stage('Code Quality Check'){
+        stage('Code Analysis'){
             steps{
-                echo "check the quality of the code"
+                echo "Analysing code to ensure it meets industry standards in $CODE_ANALYSIS_TOOL"
             }
         }
-        stage('Deploy'){
+        stage('Security Scan'){
             steps{
-                echo "deploy the application to a testing environment, $TESTING_ENVIRONMENT"
+                echo "Performing security scan on the code in $SECURITY_SCAN_TOOL to identify any vulnerabilities"
             }
         }
-        stage('Approval'){
+        stage('Deploy to Staging'){
             steps{
-                sleep 10
+                echo "Deploying application to a staging server on $STAGING_TOOL"
+            }
+        }
+        stage('Integration Tests on Staging'){
+            steps{
+                echo "Running integration tests on the staging environment to ensure the application functions as expected in a production-like environment"
             }
         }
         stage('Deploy to Production'){
             steps{
-                echo "Deploying to production environment $PRODUCTION_ENVIRONMENT"
+                echo "Deploying application to a production server on $DEPLOYMENT_TOOL"
             }
         }
     }
