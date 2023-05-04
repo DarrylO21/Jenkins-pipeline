@@ -27,7 +27,7 @@ pipeline{
                     emailext attachLog: true,
                     to: "darryldeal21@gmail.com",
                     subject: "Unit and Integration Tests Status Email",
-                    body: "Unit and Integration Tests Status: ${currentBuild.currentResult}\nStage logs attached below."
+                    body: "Unit and Integration Tests Status: ${currentBuild.currentResult}\nBuild log attached below."
                 }
             }
         }
@@ -40,6 +40,14 @@ pipeline{
             steps{
                 echo "Performing security scan on the code in $SECURITY_SCAN_TOOL to identify any vulnerabilities"
             }
+            post{
+                always{
+                    emailext attachLog: true,
+                    to: "darryldeal21@gmail.com",
+                    subject: "Security Scan Status Email",
+                    body: "Security Scan Status: ${currentBuild.currentResult}\nBuild log attached below."
+                }
+            }
         }
         stage('Deploy to Staging'){
             steps{
@@ -49,6 +57,14 @@ pipeline{
         stage('Integration Tests on Staging'){
             steps{
                 echo "Running integration tests on the staging environment to ensure the application functions as expected in a production-like environment"
+            }
+            post{
+                always{
+                    emailext attachLog: true,
+                    to: "darryldeal21@gmail.com",
+                    subject: "Integration Tests on Staging Email",
+                    body: "Integration Tests on Staging Status: ${currentBuild.currentResult}\nBuild log attached below."
+                }
             }
         }
         stage('Deploy to Production'){
