@@ -24,8 +24,7 @@ pipeline{
             }
             post{
                 always{
-                    emailext attachLog: true,
-                    to: "darryldeal21@gmail.com",
+                    mail to: "darryldeal21@gmail.com",
                     subject: "Unit and Integration Tests Status Email",
                     body: "Unit and Integration Tests Status: ${currentBuild.currentResult}\nStage logs attached below."
                 }
