@@ -25,7 +25,8 @@ pipeline{
             post{
                 mail to: "darryldeal21@gmail.com",
                 subject: "Unit and Integration Tests Status Email",
-                body: "Unit and Integration Tests Status: ${currentBuild.currentResult}\nStage logs attached below. ${STAGE_LOG, maxLines, escapeHtml}"
+                body: "Unit and Integration Tests Status: ${currentBuild.currentResult}\nStage logs attached below.",
+                attachLog: true
             }
         }
         stage('Code Analysis'){
