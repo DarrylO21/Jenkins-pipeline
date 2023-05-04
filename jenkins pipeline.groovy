@@ -23,10 +23,12 @@ pipeline{
                 echo "Running integration tests to ensure different components of the application are working together as expected"
             }
             post{
-                mail to: "darryldeal21@gmail.com",
-                subject: "Unit and Integration Tests Status Email",
-                body: "Unit and Integration Tests Status: ${currentBuild.currentResult}\nStage logs attached below.",
-                attachLog: true
+                always{
+                    mail to: "darryldeal21@gmail.com",
+                    subject: "Unit and Integration Tests Status Email",
+                    body: "Unit and Integration Tests Status: ${currentBuild.currentResult}\nStage logs attached below.",
+                    attachLogs: true
+                }
             }
         }
         stage('Code Analysis'){
